@@ -15,7 +15,7 @@
 //#define min(a, b)  (((a) < (b)) ? (a) : (b))
 #define NearInt(x) (int(x+0.5f))
 #define NearIntD(x) (int(x+0.5))
-
+//
 
 static bool isEven(int i)  {
     /*Returns true if the inputted integer is even or zero
