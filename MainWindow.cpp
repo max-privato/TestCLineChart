@@ -201,7 +201,7 @@ void MainWindow::on_plotBtn_clicked()
       QString ret;
       ret=simOut->loadFromAdfFile("TestFile.adf");
       if(ret!=""){
-          msgBox.warning(this,"TestLineChart","Unable to find \"TestFile.adf\"",QMessageBox::Ok);
+          msgBox.warning(this,"TestLineChart",ret,QMessageBox::Ok);
          return;
       }
       DeleteFMatrix(x);

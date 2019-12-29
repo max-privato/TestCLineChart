@@ -376,7 +376,7 @@ che ho definito per l'estensione ADF (Ascii Data File) La sua descrizione comple
     allowsPl4Out=false;
     fpIn=fopen(qPrintable(fullName),"r");
     if(fpIn==nullptr){
-        return "Unable to open file "+fullName+ "\n(does it exist?)";
+        return "Unable to open file \""+fullName+ "\"\n(does it exist?)";
     }
     fileInfo=fi;
     //Misuro la lunghezza delle prime tre righe, poi il numero di righe successive, poi riavvolgo.

@@ -1,3 +1,22 @@
+/*
+ * This file is part of MC's PlotXY.
+ *
+ * PlotXY was created during 1998, continuously maintained and upgraded up to current year
+ * by Massimo Ceraolo from the University of Pisa.
+ *
+ * The Linux distribution has been built using Ceraolo's source code in 2018 by Perry
+ * Clements from Canada.
+ *
+ * This program is free software: you can redistribute it under the terms of GNU Public
+ * License version 3 as published by the Free Software Foundation.
+ *
+ * PLOTXY AND ALL THE RELATED MATERIAL INCLUDED IN THE DISTRIBUTION PLOTXY.ZIP FILE OR
+ * AVAILABLE FROM GITHUB IS SUPPLIED "AS-IS" THE AUTHOR OFFERS NO WARRANTY OF ITS FITNESS
+ * FOR ANY PURPOSE WHATSOEVER, AND ACCEPTS NO LIABILITY WHATSOEVER FOR ANY LOSS OR
+ * DAMAGE INCURRED BY ITS USE.
+ *
+ */
+
 #ifndef CLINECHART_H
 #define CLINECHART_H
 #include <QRect>
@@ -45,6 +64,7 @@ struct SCurveParam {
     QString midName;  //per le funzioni la loro stringa, tipo f1v1+2*v3
     QString fullName; // per le funzioni il nome completo, tipo voltage1-voltage2/2.0
     QColor color; // il colore (anche se non definito per la var. x sarà sempre black)
+    Qt::PenStyle style;
     bool rightScale; //valore non definito per la variabile x
     QString unitS;
 };
@@ -348,7 +368,7 @@ class CFilterClipD{
                **cursorYValBkp; //Valori di salvataggio del cursore numerico
   ELegendFontSizeType legendFontSizeType;
 //  SCurveParam *curveParam;
-  QList <SCurveParam> lCurveParam;
+  QList <SCurveParam> curveParamLst;
   QVector <int>   nPlots; //Vettore dei numeri di grafici per i vari files
 
   SXVarParam xVarParam;
@@ -408,7 +428,7 @@ class CFilterClipD{
   void drawCurvesPoly(bool NoCurves);
   void drawMark(float X, float Y, int mark, bool markName);
   void drawSwarm(void);
-  int writeText2(int X, int Y, EadjustType hAdjust, EadjustType vAdjust, QString msg1, QString msg2, bool addBrackets, bool Virtual);
+  int writeText2(QPainter *myPainter, int X, int Y, EadjustType hAdjust, EadjustType vAdjust, QString msg1, QString msg2, bool addBrackets, bool Virtual);
   int smartWriteUnit(QPainter * myPainter, QFont baseFont, int X, int Y, EadjustType hAdjust, EadjustType vAdjust, QString text,  bool addBrackets, bool Virtual );
   bool fillPixelToIndex(int **pixelToIndexDX);
   bool fillPixelToIndexLog(int **pixelToIndexDX);
@@ -433,7 +453,7 @@ class CFilterClipD{
   void selectUnzoom(QMouseEvent *event);
   SFloatRect2 setFullDispRect();
   int scaleAxis(SAxis &Axis, float minVal, float maxVal, int minTic, unsigned include0, bool exactMatch);
-  int scaleXY(SFloatRect2 r, const bool justTic);
+  int scaleXY(SFloatRect2 &dispRect, const bool justTic);
   void setRect(QRect r);
   QTimer * tooltipTimer;
   int writeAxisLabel(int X, int Y, SAxis &Axis, bool Virtual);
@@ -522,6 +542,7 @@ int tooltipMargin; //distanza  in pixel dal punto per visualizzare il tootip dei
 
   // *************  8)   SIGNALS
   signals:
+  void chartResizeStopped(void);
   void valuesChanged(SXYValues values, bool hDifference, bool vDifference);
 
   // *************  9)   PRIVATE SLOTS
