@@ -91,7 +91,7 @@ void MainWindow::on_plotBtn_clicked()
   bool Error=false;
   int i, nPoints, nPlots=1; //nPlots vale normalmente 1; E' forzato a 2 solo se deve essere messa la scala destra.
 
-  // L'allocazione statica seguente serve perché i dati devono rimanere allocati anche dsopo l'uscita dal questa funzione, per reagire agli stimioli di utente, ad es. movimento del mouse sopra il grafico
+  // L'allocazione statica seguente serve perché i dati devono rimanere allocati anche dopo l'uscita dal questa funzione, per reagire agli stimoli di utente, ad es. movimento del mouse sopra il grafico
   static float **x;
   static float **y;
   float xMin, xMax, a, b;
