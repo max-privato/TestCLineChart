@@ -50,12 +50,12 @@ static bool isEven(int i)  {
   }
 
 
-CLineChart::CLineChart(QWidget * parent):QLabel(parent,nullptr)
+CLineChart::CLineChart(QWidget * parent):QLabel(parent)
 {
 /*
 La reimplementazione della funzione virtual resizeEvent in questo file contiene la chiamata a plot().
 */
-    myTimer = new QTimer(this);
+     myTimer = new QTimer(this);
     tooltipTimer = new QTimer(this);
     connect(tooltipTimer, SIGNAL(timeout()), this, SLOT(checkTooltip()));
     myTimer->setSingleShot(true);
@@ -93,6 +93,7 @@ La reimplementazione della funzione virtual resizeEvent in questo file contiene 
     plotDone=false;
     printing=false;
     rectTTVisible=false;
+    showPlotCopiedDlg=true;
     strongFilter=false;
     twinScale=false;
     useBrackets=true;
@@ -163,7 +164,7 @@ La reimplementazione della funzione virtual resizeEvent in questo file contiene 
     //Nelle seguenti righe faccio predisposizioni affinché nella routine Plot si possa prima deallocare (rispettivamente con delete, DeleteIMatrix e DeleteFMatrix) gli array e poi riallocarli con le dimensioni giuste.
     cursorXValues=nullptr;
     cursorXValBkp=nullptr;
-    curveParamLst.clear();;
+    curveParamLst.clear();
     startIndex=nullptr;
     stopIndex=nullptr;
     pixelToIndexDX=CLineChart::CreateIMatrix(1,1);
@@ -616,14 +617,14 @@ Oltre che al momento della costruzione di CLineChart, e ad ogni suo ridimensiona
    lgdFont.setPixelSize(fontPxSize);
   }
   QFontMetrics fm(baseFont);
-  float fSmallHSpace=0.6f*fm.width("a");
+  float fSmallHSpace=0.6f*fm.horizontalAdvance("a");
   smallHSpace=int(fSmallHSpace);
   if(fSmallHSpace<=2.0f)
     markHalfWidth=1.5f*fSmallHSpace;
   else
     markHalfWidth=qMax(1.5f*2.0f,1.00f*fSmallHSpace);
 
-  numWidth=fm.width("+0.000");
+  numWidth=fm.horizontalAdvance("+0.000");
   textHeight=fm.height();
   maxTic=int(plotRect.height()/(1.2f*textHeight)/2.f)-1;
   minYTic=qMin(4,maxTic-3);
@@ -641,7 +642,6 @@ Pertanto l'indice di file è sempre 0 e l'indice della variabile è sempre 0.
           yZero; //Coordinata pixel Y della retta y=0 (scale lineari) e logy=0 (scale log)
   float minXStep, fAux;
   QBrush redBrush, grayBrush;
-  QString XText;
 
   plotPen.setColor(Qt::black);
   myPainter->setPen(plotPen);
@@ -1745,8 +1745,8 @@ int CLineChart::smartWriteUnit(QPainter * myPainter, QFont baseFont, int X, int 
     wFont=baseFont;
     QChar c=text[i];
     if(useSmartUnits){
-      if(c=='w') c=0x03A9; //unicode per omega maiuscolo
-      if(c=='u') c=0x03BC; //unicode per mu minuscolo
+      if(c=='w') c=QChar(0x03A9); //unicode per omega maiuscolo
+      if(c=='u') c=QChar(0x03BC); //unicode per mu minuscolo
 	}  
     if(useSmartUnits && (c.isDigit()||c=='-'||c=='+'||c=='.')){  //Vedo se questi caratteri vanno trattati come esponenti
       wFont=baseFont;
@@ -1758,11 +1758,11 @@ int CLineChart::smartWriteUnit(QPainter * myPainter, QFont baseFont, int X, int 
         wFont=baseFont;
     }
     myPainter->setFont(wFont);
-    len+=myPainter->fontMetrics().width(c);
+    len+=myPainter->fontMetrics().horizontalAdvance(c);
   }
   myPainter->setFont(baseFont);
   if(addBrackets)
-    len+=myPainter->fontMetrics().width("()");
+    len+=myPainter->fontMetrics().horizontalAdvance("()");
   if(Virtual)
   return len;
   //Il calcolo preliminare appena fatto mi serve per la gestione del punto di inizio della scrittura tenendo conto dei vari allineamenti previsti. Per ora però non lo uso e passo alla scrittura.
@@ -1777,14 +1777,14 @@ int CLineChart::smartWriteUnit(QPainter * myPainter, QFont baseFont, int X, int 
     wY+=myPainter->fontMetrics().height()/2-1;
   if(addBrackets){
     myPainter->drawText(wX,wY,"(");
-    wX+=myPainter->fontMetrics().width("(");
+    wX+=myPainter->fontMetrics().horizontalAdvance("(");
   }
     for(int i=0; i<text.size(); i++){
       wFont=baseFont;
       QChar c=text[i];
       if(useSmartUnits){
-        if(c=='w') c=0x03A9; //unicode per omega maiuscolo
-        if(c=='u') c=0x03BC; //unicode per mu minuscolo
+        if(c=='w') c=QChar(0x03A9); //unicode per omega maiuscolo
+        if(c=='u') c=QChar(0x03BC); //unicode per mu minuscolo
       }
       if(useSmartUnits && (c.isDigit()||c=='-'||c=='+'||c=='.')){
         wFont=baseFont;
@@ -1797,11 +1797,11 @@ int CLineChart::smartWriteUnit(QPainter * myPainter, QFont baseFont, int X, int 
           myPainter->setFont(wFont);
           myPainter->drawText(wX,wY,QString(c));
         }
-        wX+=myPainter->fontMetrics().width(c);
+        wX+=myPainter->fontMetrics().horizontalAdvance(c);
       } else{
         myPainter->setFont(baseFont);
         myPainter->drawText(wX,wY,QString(c));
-        wX+=myPainter->fontMetrics().width(c);
+        wX+=myPainter->fontMetrics().horizontalAdvance(c);
       }
     }
 
@@ -1855,14 +1855,14 @@ Questo ha comportato nel seguente if la sostituzione di "atLeft" con "atRight" e
   if(msg1+msg2=="")
       return 0;
   myPainter->setFont(baseFont);
-  width1=myPainter->fontMetrics().width(msg1);
+  width1=myPainter->fontMetrics().horizontalAdvance(msg1);
   H1=myPainter->fontMetrics().height();
   myPainter->setFont(expFont);
-  width2=myPainter->fontMetrics().width(msg2);
+  width2=myPainter->fontMetrics().horizontalAdvance(msg2);
   H2=myPainter->fontMetrics().height();
 
   if(addBrackets)
-    wBracket=myPainter->fontMetrics().width("(");
+    wBracket=myPainter->fontMetrics().horizontalAdvance("(");
   else
     wBracket=0;
 
@@ -1945,7 +1945,7 @@ bool CLineChart::event(QEvent *event){
             if(hovData.rect.contains(pos)){
               if(!curveParamLst[hovData.iTotPlot].isFunction)break;
               hovVarRect= hovData.rect;
-              QString str=curveParamLst[hovData.iTotPlot].fullName;
+//              QString str=curveParamLst[hovData.iTotPlot].fullName;
               QToolTip::showText(helpEvent->globalPos(), curveParamLst[hovData.iTotPlot].fullName);
 //              setToolTip(lCurveParam[hovData.iTotPlot].fullName);
             }
@@ -2390,14 +2390,12 @@ int CLineChart::giveNearValue(QPoint mouseP , QPoint &nearP, QPointF &valueP){
     /* Prima di tutto trovo index che è l'indice del valore sull'asse x più vicino al cursore*/
     if(filesInfo[iFile].variableStep){
       indexSX=qMax(0,pixelToIndexDX[VSFile][netMouseP.x()]-1);
-      deltaX=px[iFile][indexSX+1]-px[iFile][indexSX];
       if(fMouseX-px[iFile][indexSX]<px[iFile][indexSX+1]-fMouseX)
         index=indexSX;
       else
         index=indexSX+1;
     }else{
       deltaX=px[iFile][1]-px[iFile][0];
-      indexSX=int((fMouseX-px[iFile][0])/deltaX);
       index=NearInt((fMouseX-px[iFile][0])/deltaX);
       //Può accadere che fra l'ultimo e il penultimo punto non si abbia la stessa distanza
       //che fra gli altri. Questo perché se Tmax supera TOld+DeltaT, vengono registrati
@@ -2544,10 +2542,10 @@ void CLineChart::mouseMoveEvent(QMouseEvent *event)
 2) nella seconda gestisce la selezione dell'area di zoom
 3) nella terza gestisce i cursori di dati
 */
-    int nearX;
-    static SXYValues values;
-    int posX=event->pos().x();
-if(dataCursDragging)
+  int nearX;
+  static SXYValues values;
+  int posX=event->pos().x();
+  if(dataCursDragging)
     hovVarRect=QRect(0,0,0,0);
     //La seguente sezione 1 è stata trasferita all'interno della funzione event (che cestisce anche lo snap to grid)
     /*
@@ -2566,12 +2564,12 @@ if(dataCursDragging)
  */
 
 //2) selezione dell'area di zoom
-    if(zoomSelecting){  //sono in fase di selezione del rettangolo di zoom
-      //endPos è la posizione finale per il rettangolo delle zoomate
-      endZoomRectPos=event->pos();
-      update();
-      return;
-    }
+  if(zoomSelecting){  //sono in fase di selezione del rettangolo di zoom
+    //endPos è la posizione finale per il rettangolo delle zoomate
+    endZoomRectPos=event->pos();
+    update();
+    return;
+  }
 
 //3) gestione dei cursori di dati
    //A questo punto non sto selezionando il rettangolo di zoom. Adesso se sono in un'azione di dataRectDragging aggiorno i valori numerici e la posizione del cursore dati; altrimenti valuto se il mouse è nel raggio di azione di uno dei tre cursori dati. La cosa viene ripetuta tre volte, una per ogni cursore dati.
@@ -2616,7 +2614,7 @@ if(dataCursDragging)
         }
       }
     } else{
-        ;
+
     }
     update();
 }
@@ -2655,10 +2653,12 @@ Questo per me è inaccettabile. Meglio lasciare un titolo bianco, che è quello 
 void CLineChart::mousePressEvent(QMouseEvent *event){
 /* Quando mi sposto con il mouse, se entro nel raggio d'azione di un dataCursor il puntatore del mouse diviene la doppia freccetta orizontale ed un eventuale click aggancia il dataCursor attivo alla posizione del mouse.
 Questo aggancio viene comandato nella funzione mouseMoveEvent(), attraverso la selezione del valore opportuno per la variabile dataCursSelecting, la quale vale 0 se quando non siamo nel raggio d'azione di alcun cursore dati, altrimenti vale il numero del cursore dati: 1 per quello base, 2 per quello con le differenze.
-
   Pertanto la routine ha un comportamento che va distinto in funzione del valore della variabile dataCursSelecting.
-
 */
+    /* Il seguente emit serve per evitare che se l'utente clicca nell'area LineChart di una PlotWin, dopo i primi click, non avviene più lo switch automatico della tab. Infatti l'evento focusInEvent, si attiva solo se il click avviene sulla riga di intestazione della finestra plotWIN,  o la prima volta che si clicca sull'area di LineChart. Le volte successive non si attiva; per fare lo switch della tab anche in questo caso, catturo dentro LineChart il comando mousePressEvent():
+*/
+
+    emit chartClickedOn();
     int Ret=0, x1=event->pos().x()-1;
 
     if(dataCursSelecting>0){  //sono nel raggio d'azione di un qualche cursore dati
@@ -2820,11 +2820,6 @@ void  CLineChart::drawAllLabelsAndGrid(SAxis axis){
     if(axis.type==atX){
       initialPix=Y0;
       finalPix=Y1;
-      if(axis.scaleMin*axis.scaleMax>0)
-        zeroPosition=-1;
-      else{
-        zeroPosition=NearInt(-axis.scaleMin/(axis.scaleMax-axis.scaleMin)*(X1-X0)+X0);
-      }
     }else{
       initialPix=X0;
       finalPix=X1;
@@ -2842,7 +2837,7 @@ void  CLineChart::drawAllLabelsAndGrid(SAxis axis){
     // Tacche e numeri.
     //Per prima cosa vedo se devo rimuovere una tacca.
     int axisLabelLen=writeAxisLabel(0,0,axis,true);
-    //rimuovo euristicamente la tacca se lla larghezza di ticinterval.x non è almeno pari alla larghezza in pixel della aaxislabel aumentata del 50%. Altrimento divrei fare calcolimolto articolati per un fatto tutto sommato secondario.
+    //rimuovo euristicamente la tacca se la larghezza di ticinterval.x non è almeno pari alla larghezza in pixel della axislabel aumentata del 50%. Altrimento dovrei fare calcoli molto articolati per un fatto tutto sommato secondario.
     if(axisLabelLen*1.5f>axis.ticIntervalPix)
       removeOneNumLbl=true;
 
@@ -2869,7 +2864,7 @@ void  CLineChart::drawAllLabelsAndGrid(SAxis axis){
     //La seguente riga mette la label di asse al centro fra due tic, se non sono in halfTicNum, nel qual caso viene spostata un poco a sinistra ma non tanto da sembrare posta proprio in corrispondenza della "halftic".
     int xAxisLabelx=X1-int((0.5f+0.1f*xAxis.halfTicNum)*axis.ticIntervalPix);
     if(removeOneNumLbl)
-        xAxisLabelx-=axis.ticIntervalPix/2;
+        xAxisLabelx-=int(axis.ticIntervalPix/2.f);
     writeAxisLabel(xAxisLabelx, Y1+xAxis.ticPixWidth,xAxis,false);
     //Eventuale griglia:
     for(auxF=axis.ticIntervalPix, x=NearInt(auxF); x<xAxis.widthPix-1;
@@ -3112,7 +3107,7 @@ void CLineChart::drawAllLabelsAndGridLog(SAxis axis){
   switch(numTicType){
    case 1:
       pos[1]=pos0;
-      decInterval=pos[0]-pos[1];
+//      decInterval=pos[0]-pos[1];
       break;
     case 2:
       decInterval= float(pos10+1)/(axis.eMax-axis.eMin);
@@ -3300,7 +3295,8 @@ void CLineChart::paintEvent(QPaintEvent *ev)
 void CLineChart::copy(){
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setImage(*myImage);
-    QMessageBox::information(this,"CLineChart",tr("plot copied as an image into the system clipboard."));
+    if(showPlotCopiedDlg)
+      QMessageBox::information(this,"CLineChart","plot copied as an image into the system clipboard.");
 }
 
 QImage *  CLineChart::giveImage(){
@@ -3377,10 +3373,10 @@ void CLineChart::mark(bool store){
       QApplication::beep();
       return;
     }
-    //Traccio i marcatori sulle curve:
-    for(iFile=0; iFile<nFiles; iFile++){
-      for(iPlot=0; iPlot<nPlots[iFile]; iPlot++)	{
-        if(X>=xStartIndex[iFile] && X<xStopIndex[iFile]){
+  //Traccio i marcatori sulle curve:
+  for(iFile=0; iFile<nFiles; iFile++){
+    for(iPlot=0; iPlot<nPlots[iFile]; iPlot++)	{
+      if(X>=xStartIndex[iFile] && X<xStopIndex[iFile]){
         someMark=true;
         markSingle(iFile, iVSFile, iPlot, iTotPlot, store);
       }else if (store){
@@ -3653,7 +3649,7 @@ QString CLineChart::plot(bool autoScale){
   resetMarkData();
   designPlot();
   lastAutoScale=autoScale;
-  iRet=0;
+//  iRet=0;
   if(autoScale){
     bool someLeftScale=false, someRightScale=false;
     /*Gestione eventuale scala destra. La metto se sono verificate due condizioni:
@@ -4060,7 +4056,8 @@ QString CLineChart::print(QPrinter * printer, bool thinLines){
     QMessageBox::critical(this,"",ret);
     return ret;
   }
-  QRect prnRect=printer->pageRect();
+  QRect prnRect=printer->pageLayout().paintRectPixels(printer->resolution());
+
   if(prnRect.width()<20 || prnRect.height()<20 ){
     ret=tr("Unable to get valid information from the selected printer");
     QMessageBox::critical(this,"",ret);
@@ -4228,8 +4225,8 @@ Significato delle variabili passate (solo fino a maxVal sono usate per scale log
         msg="Cannot create a log scale on the y-axis\n"
             "because the range contains null or negative values\n\n"
             "Please change the variable to be plot, or the y-axis range or choose a linear scale";
-        QMessageBox::critical(this, "MC's PlotXWin",msg,QMessageBox::Ok);
-        return 1;
+      QMessageBox::critical(this, "MC's PlotXWin",msg,QMessageBox::Ok);
+      return 1;
     }
     sprintf(buffer,"%+10.3e",double(minVal));
     sscanf(buffer+7, "%u", &myAxis.eMin);
@@ -4246,20 +4243,20 @@ Significato delle variabili passate (solo fino a maxVal sono usate per scale log
     myAxis.scaleMax=powf(10.,myAxis.eMax);
     if(myAxis.scaleType==stDB){
       sprintf(buffer,"%d",20*myAxis.eMin);
-      myAxis.maxTextWidth=myPainter->fontMetrics().width(buffer);
+      myAxis.maxTextWidth=myPainter->fontMetrics().horizontalAdvance(buffer);
       sprintf(buffer,"%d",20*myAxis.eMax);
-      myAxis.maxTextWidth=qMax(myAxis.maxTextWidth, myPainter->fontMetrics().width(buffer));
+      myAxis.maxTextWidth=qMax(myAxis.maxTextWidth, myPainter->fontMetrics().horizontalAdvance(buffer));
       sprintf(buffer,"dB");
       if(useBrackets)
         sprintf(buffer,"(dB)");
-      myAxis.maxTextWidth=qMax(myAxis.maxTextWidth, myPainter->fontMetrics().width(buffer));
+      myAxis.maxTextWidth=qMax(myAxis.maxTextWidth, myPainter->fontMetrics().horizontalAdvance(buffer));
     }else{// myAxis.ScaleType=stLog
-        aux=myPainter->fontMetrics().width("10");
+        aux=myPainter->fontMetrics().horizontalAdvance("10");
       sprintf(buffer,"%d",myAxis.eMin);
       myPainter->setFont(expFont);
-      myAxis.maxTextWidth=aux+myPainter->fontMetrics().width(buffer);
+      myAxis.maxTextWidth=aux+myPainter->fontMetrics().horizontalAdvance(buffer);
       sprintf(buffer,"%d",myAxis.eMax);
-      aux+=myPainter->fontMetrics().width(buffer);
+      aux+=myPainter->fontMetrics().horizontalAdvance(buffer);
       myAxis.maxTextWidth=qMax(myAxis.maxTextWidth,aux);
       myPainter->setFont(numFont);
     }
@@ -4470,9 +4467,9 @@ ComputeScaleFactor:
   sprintf(num,format,double(myAxis.scaleMax));
   sscanf(num,"%f",&YY);
   if(myAxis.done==0){
-    aux=myPainter->fontMetrics().width(num);
+    aux=myPainter->fontMetrics().horizontalAdvance(num);
     sprintf(num,format,double(myAxis.scaleMin));
-    aux=qMax(aux,myPainter->fontMetrics().width(num));
+    aux=qMax(aux,myPainter->fontMetrics().horizontalAdvance(num));
     goto Return;
   }
   aux=0;
@@ -4488,7 +4485,7 @@ ComputeScaleFactor:
     }
     sprintf(format+2,"%1df",qMax(myAxis.ticDecimals,0));
     sprintf(num,format,double(yf));
-    aux=qMax(aux,myPainter->fontMetrics().width(num));
+    aux=qMax(aux,myPainter->fontMetrics().horizontalAdvance(num));
     yf+=myAxis.ticInterval*(1+myAxis.halfTicNum);
     sprintf(num,format,double(yf));
     sscanf(num,"%f",&yy);
@@ -4716,7 +4713,13 @@ int CLineChart::writeAxisLabel(int X, int Y, SAxis &axis, bool _virtual ){
  * Si tratta di un'etichetta che può contenere una potenza di 10 (se necessaria per numeri
  * molto grandi o piccoli)  ovvero, fra parentesi, l'unità di misura con prefisso.
  * Se autoLabelXY=true, si usano le unità di misura attribuite alle variabili attraverso
- * xVarParam e curveParam e passate con getData()
+ * xVarParam e curveParam e passate con getData().
+ * Il valore locale AutolabelXY_ partedal valore della variabile globale del grafico,
+ * ma viene riconvertita in false se il numero è talmente piccolo o grande che non c'è un
+ * prefix adatto per rappresentarlo. Il set di 'prefix' che uso è minore di quello completo
+ * del SI, inquanto alcuni pprefissi quali yootto oyotta non li conosce nessuno e sono per
+ * me più dannosi che utili.
+ *
  * Naturalmente esse potranno essere usate solo se le unità relative ai vari plot del
  * medesimo asse sono uguali.
  * Se però useUserUnits=true, vengono usate le unità passate attraverso getUserUnits()
@@ -4730,7 +4733,7 @@ int CLineChart::writeAxisLabel(int X, int Y, SAxis &axis, bool _virtual ){
  * l'ampiezza della label, che viene ritornata dalla funzione.
  * Se Virtual=false il valore di ritorno è indeterminato.
  */
-  char prefix[]={'p','n','u','m','0','k','M','G','T'};
+  char prefix[]={'f','p','n','u','m','0','k','M','G','T','P'};
   int iTotPlot;
   EadjustType hAdjust, vAdjust;
   QString unitS=""; //E' l'unità di misura dell'asse corrente, valutata considerando i valori di autoLabelXY e useUserUnits (v. spiegazione inizio funzione).
@@ -4756,22 +4759,22 @@ int CLineChart::writeAxisLabel(int X, int Y, SAxis &axis, bool _virtual ){
   * autoLabelXY, useUserUnits, useSmartUnits (dettagli in Developer.odt|Gestione delle
   * etichette di asse.
  ***/
-
+  bool autoLabelXY_=autoLabelXY;
  // 2.1: analizzo casi speciali
  if(axis.scaleType==stDB){
    unitS="dB";
-//   autoLabelXY=false;  //Questa riga va commentata percé posso volere l'etichetta su uno degli assi e dB sull'altro, ementre autoLabelXY agisce su tutti gli assi
+//   autoLabelXY_=false;  //Questa riga va commentata perché posso volere l'etichetta su uno degli assi e dB sull'altro, mentre autoLabelXY_ agisce su tutti gli assi
    goto Escape;
  }
 
- if(!autoLabelXY && ! useUserUnits){
+ if(!autoLabelXY_ && ! useUserUnits){
    unitS="";
    goto Escape;
  }
 
- if(abs(axis.scaleExponent)>12){  //caso speciale in cui decvo forzare l'uso delle potenze di 10
+ if(abs(axis.scaleExponent)>18){  //caso speciale in cui devo forzare l'uso delle potenze di 10
      useUserUnits=false;
-     autoLabelXY=false;
+     autoLabelXY_=false;
      unitS="";
      goto Escape;
  }
@@ -4786,10 +4789,18 @@ int CLineChart::writeAxisLabel(int X, int Y, SAxis &axis, bool _virtual ){
 
  if(axis.scaleType==stLog){
    unitS="";
-   autoLabelXY=false;
+   autoLabelXY_=false;
    goto Escape;
  }
 
+ if(axis.scaleExponent/3+5<0){
+    autoLabelXY_=false;
+    goto Escape;
+ }
+ if(axis.scaleExponent/3+5>=int(sizeof(prefix))){
+    autoLabelXY_=false;
+    goto Escape;
+ }
 
 //2.2: info da file. Se arrivo qui devo interpretare le unità in funzione di informazioni prelevate da metadati o dal nome di variabile prelevati dal file di input
 if(axis.type==atX)
@@ -4805,8 +4816,8 @@ if(axis.type==atX)
         break;
       }
       // Tutte le variabili sul medesimo asse devono avere la stessa unità. Pertanto una volta definita la unit per una variabile dell'asse corrente anche le altre devono avere la stessa oppure non metto niente sull'asse.
-      //devo però tener conto della regola, illustrata anche in Tutorial, che non si mette come unità automatica "f" o "s" sugli assi y e yr. Questo perché si intende che il tempo e la frequenza di norma debbano stare sull'asse orizzontale e solo in casi particolari su quello verticale. Inoltre questo evita che in ATP tutte le variabili TACS prendano come unità "s"
-      if(unitS=="" && curveParamLst[iTotPlot].unitS!="s" && curveParamLst[iTotPlot].unitS!="Hz"){
+      //devo però tener conto della regola, illustrata anche in Tutorial, che non si mette come unità automatica "s" sugli assi y e yr, anche per evitare he tutte le variabili TACS predano questa unità in modo improprio.
+      if(unitS=="" && curveParamLst[iTotPlot].unitS!="s"){
         unitS=curveParamLst[iTotPlot].unitS;
       }else if(unitS!=curveParamLst[iTotPlot].unitS){
         unitS="";
@@ -4824,7 +4835,7 @@ Per avere compatibilità con entrambe le funzioni uso tre variabili testuali: ms
 */
 Escape:
   QString msgBase="", msgExp="";
-  bool useWriteText2= (!autoLabelXY && !useUserUnits) || (useUserUnits && unitS=="");
+  bool useWriteText2= (!autoLabelXY_ && !useUserUnits) || (useUserUnits && unitS=="");
   if(axis.scaleType==stDB)
       useWriteText2=false; //necessario perché "dB" è in unitS che non è usato da writetext2()
   if(useWriteText2){
@@ -4836,8 +4847,8 @@ Escape:
           msgExp="";
       }
   }else{
-    if(prefix[axis.scaleExponent/3+4]!='0' && axis.scaleType!=stDB)
-      unitS.prepend(prefix[axis.scaleExponent/3+4]);
+    if(prefix[axis.scaleExponent/3+5]!='0' && axis.scaleType!=stDB)
+      unitS.prepend(prefix[axis.scaleExponent/3+5]);
   }
 
 //Write:
@@ -4852,7 +4863,7 @@ Escape:
       X+=int(2*onePixDPI);
 
   /* Si ha l'obiettivo di passare prima o poi all'unica fuzione smartWriteUnit(). Per ora vi sono ancora delle difficoltà nel calcolo delle spaziature, e quindi nel caso della sola potenza di 10 uso ancora il più vecchio drawText2.
-Notare che a drawText1 si passano separatamente base ed esponente, mentre in smartWriteUnit la potenza di 10 è automaticamente riconosciuta dalla presenza come primi tre caratteri di "10*"
+Notare che a drawText2 si passano separatamente base ed esponente, mentre in smartWriteUnit la potenza di 10 è automaticamente riconosciuta dalla presenza come primi tre caratteri di "10*"
 */
 
   if (useWriteText2){ //Caso residuo solo per le potenze di 10
@@ -4924,7 +4935,7 @@ PER ENTRAMBI I CASI limito comunque la leggenda ad un massimo di 3 righe, rinunc
     myPainter->setPen(Qt::black);
     msg="(file "+filesInfo[0].name + "; x-var "+xVarParam.name+")  ";
     if(!_virtual)myPainter->drawText(xPosition,yPosition,msg);
-    xPosition+=myPainter->fontMetrics().width(msg);
+    xPosition+=myPainter->fontMetrics().horizontalAdvance(msg);
     while(1){
       iTotPlot++;
       if(iTotPlot==numOfTotPlots)    break;
@@ -4937,24 +4948,23 @@ PER ENTRAMBI I CASI limito comunque la leggenda ad un massimo di 3 righe, rinunc
       if(!blackWhite)
         myPainter->setPen(curveParamLst[iTotPlot].color);
       //Decido se devo andare a capo sulla base della stringa senza "    ", ma se poi scrivo metto la stringa con "    ":
-      if(xPosition+myPainter->fontMetrics().width(curveParamLst[iTotPlot].name)<plotRect.width()){
+      if(xPosition+myPainter->fontMetrics().horizontalAdvance(curveParamLst[iTotPlot].name)<plotRect.width()){
       if(!_virtual){
            myPainter->drawText(xPosition,yPosition,msg);
            struct SHoveringData hovData;
            hovData.rect=myPainter->boundingRect(xPosition,yPosition-textHeight,400,50,Qt::AlignLeft, msg);
            hovData.iTotPlot=iTotPlot;
            hovDataLst.append(hovData);
-           markerXPos=xPosition+myPainter->fontMetrics().width(curveParamLst[iTotPlot].name)+int(markHalfWidth)+1;
+           markerXPos=xPosition+myPainter->fontMetrics().horizontalAdvance(curveParamLst[iTotPlot].name)+int(markHalfWidth)+1;
            markerYPos=int(yPosition-0.8f*myPainter->fontMetrics().height()+int(markHalfWidth));
            //Posizione dei marcatori vicino ai rispettivi nomi sulla leggenda:
            markPositions[iTotPlot].setX(markerXPos);
            markPositions[iTotPlot].setY(markerYPos);
         }
-        xPosition+=myPainter->fontMetrics().width(msg);
+        xPosition+=myPainter->fontMetrics().horizontalAdvance(msg);
       }else{
         iTotPlot--;
         numRows++;
-        xPosition=0;
         yPosition+=textHeight;
         xPosition=0;
         if(numRows==4){
@@ -4989,7 +4999,7 @@ PER ENTRAMBI I CASI limito comunque la leggenda ad un massimo di 3 righe, rinunc
         iTotPlot++;
         msg=msg+curveParamLst[iTotPlot].name+"   ";
  //Se sforo il fine riga tolgo il blocco corrente dalla riga corrente a meno che non sia l'unico blocco:
-        if(myPainter->fontMetrics().width(msg)>plotRect.width()){
+        if(myPainter->fontMetrics().horizontalAdvance(msg)>plotRect.width()){
           if(blocksPerRow[iRow]>1){
             blocksPerRow[iRow]--;
             iTotPlot=iTotPlStartBlock;
@@ -5039,7 +5049,7 @@ PER ENTRAMBI I CASI limito comunque la leggenda ad un massimo di 3 righe, rinunc
         msg="  file "+ filesInfo[iFile].name+":  ";
       myPainter->drawText(xPosition,yPosition,msg);
       //Ora che ho scritto ad inizio riga il nome del file scrivo l'elenco delle corrispondenti variabili:
-      xPosition+=myPainter->fontMetrics().width(msg);
+      xPosition+=myPainter->fontMetrics().horizontalAdvance(msg);
       for(int iVar=0; iVar<nPlots[iFile]; iVar++){
         iTotPlot++;
         if(!blackWhite)
@@ -5052,9 +5062,9 @@ PER ENTRAMBI I CASI limito comunque la leggenda ad un massimo di 3 righe, rinunc
         hovData.rect=myPainter->boundingRect(xPosition,yPosition-textHeight,400,50,Qt::AlignLeft, msg);
         hovData.iTotPlot=iTotPlot;
         hovDataLst.append(hovData);
-        markerXPos=xPosition+myPainter->fontMetrics().width(curveParamLst[iTotPlot].name)+int(markHalfWidth)+1;
+        markerXPos=xPosition+myPainter->fontMetrics().horizontalAdvance(curveParamLst[iTotPlot].name)+int(markHalfWidth)+1;
         markerYPos=yPosition-int(0.8f*myPainter->fontMetrics().height()+int(markHalfWidth));
-        xPosition+=myPainter->fontMetrics().width(msg);
+        xPosition+=myPainter->fontMetrics().horizontalAdvance(msg);
        //Posizione dei marcatori vicino ai rispettivi nomi sulla leggenda:
        markPositions[iTotPlot].setX(markerXPos);
        markPositions[iTotPlot].setY(markerYPos);
