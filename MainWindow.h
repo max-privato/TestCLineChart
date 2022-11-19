@@ -41,8 +41,8 @@ private slots:
     void on_yLinScale_clicked();
     void on_yDbScale_clicked();
 
-
     void on_diffTBtn_clicked();
+    void on_titleTBtn_clicked(bool checked);
 
 private:
     bool exactMatch;

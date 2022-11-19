@@ -240,6 +240,7 @@ void MainWindow::on_plotBtn_clicked()
 
   ui->scaleTBtn->setEnabled(true);
   ui->dataTBtn->setEnabled(true);
+  ui->titleTBtn->setEnabled(true);
 
   elaps=timer.nsecsElapsed();
   elapsMs=float(elaps/1.e6);
@@ -402,5 +403,14 @@ void MainWindow::on_diffTBtn_clicked()
   if(ui->lineChart->giveActiveDataCurs()==2){
     ui->lineChart->setActiveDataCurs(1);
   }
+}
+
+
+void MainWindow::on_titleTBtn_clicked(bool checked)
+{
+    if(checked)
+      ui->lineChart->enableTitle();
+    else
+      ui->lineChart->disableTitle();
 }
 
