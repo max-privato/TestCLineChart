@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     move(150,100);
+    ui->plotBtn->setFocus();
 
     //    ui->lineChart->mark();
     myScaleDlg =new CScaleDlg(this);

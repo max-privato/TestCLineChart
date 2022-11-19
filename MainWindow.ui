@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>647</width>
-    <height>416</height>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -222,7 +222,13 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Plot</string>
+              <string>&amp;Plot</string>
+             </property>
+             <property name="autoDefault">
+              <bool>true</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -351,6 +357,9 @@
     </item>
     <item>
      <widget class="QFrame" name="rightFrame">
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
