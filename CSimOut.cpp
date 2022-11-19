@@ -26,8 +26,9 @@
 #include "ExcludeATPCode.h"
 #include "MTLmatrix.h"
 #include "mat.h"
-#include "matrix.h"
+#include "Matrix.h"
 #include "CSimOut.h"
+#include "qregularexpression.h"
 
 //le seguenti due righe sono per Matlab (versione 7)
 #define max(a, b)  (((a) > (b)) ? (a) : (b))
@@ -62,7 +63,7 @@ void CSimOut::addPrefix(QString &VarName, QString unit, QString CCBM, int Var){
   if(CCBM.length()>0)
     CCBM_1=CCBM[0];
   else
-    CCBM_1=-1;  //qui sta per indefinito, e infatti verr convertito nel prefisso con '?'.
+    CCBM_1='?';  //qui sta per indefinito, e infatti verr convertito nel prefisso con '?'.
 
   //elimino eventuali spazi iniziali e finali da unit:
   unit=unit.trimmed();
@@ -217,7 +218,7 @@ struct DataFromModelicaFile  CSimOut::inputMatModelicaData(FILE * pFile){
 
     for(int i=0; i<fileData.descriptionLst.count(); i++){
       int start, end;
-      if(fileData.descriptionLst[i].count()==0){
+      if(fileData.descriptionLst[i].size()==0){
         fileData.unitLst.append("");
         continue;
       }
@@ -269,7 +270,7 @@ struct DataFromModelicaFile  CSimOut::inputMatModelicaData(FILE * pFile){
        //legittimazione specifica dagli standard MSL (tichet su trac.modelica.org #2142,
        // comment 7)
        if(str=="Ohm"||str=="ohm")
-           str=QString(0x03A9); //unicode per omega maiuscolo
+           str=QString(QChar(0x03A9)); //unicode per omega maiuscolo
 
        fileData.unitLst.append(str);
     }
@@ -394,6 +395,14 @@ QString CSimOut::loadFromAdfFile(QString fullName, bool csv){
  * che ho definito per l'estensione ADF (Ascii Data File) La sua descrizione completa è
  *  nel file "Input formats and naming conventions".
 */
+
+
+ /* NOTA IMPORTANTE
+  * questa routine si renderebbe molto più semplice e leggibile se usassi QString.
+  * Invece dei strtok c'è l'ottima funzione "split" di QString. per fare lo split con
+  * la possibilità di avere uno o più separatori basta mettere come argomento una
+  * regular expression, ad esempio QRregExp([ \t,]).
+  */
   char  *str=nullptr, //Stringa per contenere le prime due righe del file.
         *str1, *pStr, *pBuffer,
       *fStr,  //Stringa che stabilisce il formato di lettura dei numeri
@@ -464,6 +473,8 @@ QString CSimOut::loadFromAdfFile(QString fullName, bool csv){
        acceptsCommas=true;
        *pStr='\0';
     }
+    free(fStr);
+    free(tStr);
     if(acceptsCommas){
       fStr=strdup("%f,");
       tStr=strdup(" \t,");
@@ -472,13 +483,13 @@ QString CSimOut::loadFromAdfFile(QString fullName, bool csv){
       tStr=strdup(" \t");
     }
     //Ora la stringa può contenere il passo automatico il nome della variabile x e null'altro.
-    QRegExp notSeparators, separators;
+    QRegularExpression notSeparators, separators;
     if(acceptsCommas){
-      separators=QRegExp("[, \t]");
-      notSeparators=QRegExp("[^, \t]");
+      separators=QRegularExpression("[, \t]");
+      notSeparators=QRegularExpression("[^, \t]");
     }else{
-      separators=QRegExp("[ \t]");
-      notSeparators=QRegExp("[^ \t]");
+      separators=QRegularExpression("[ \t]");
+      notSeparators=QRegularExpression("[^ \t]");
     }
 
     //La stringa residua può contenere step e xVariableName (entrambi opzionali)
@@ -1513,8 +1524,11 @@ Il file contiene sequenzialmente coppie header-matrice.
         }
         if(header.nCols>1) {
             iCol++;
-            varNames[varIndex]=QString(pVarName)+"("+QString(iCol)+")";
-            if(iCol==header.nCols)iCol=0;
+           QString str;
+            str.setNum(iCol);
+//            varNames[varIndex]=QString(pVarName)+"("+QString(iCol)+")";
+            varNames[varIndex]=QString(pVarName)+"("+str+")";
+             if(iCol==header.nCols)iCol=0;
         }
         if(isDouble){
             for(point=0; point<numOfPoints; point++){
@@ -2098,7 +2112,7 @@ QString CSimOut::loadFromModelicaMatFile(FILE * pFile, bool addAlias_){
        if(lastIndexOf>-1 && addAlias_){  //Caso in cui un parametro è stato memorizzato e gli devo aggiungere uno o più alias
          QString curDescription=paramInfo.description[lastIndexOf];
          QString curName=paramInfo.names[lastIndexOf];
-         int lastCharIdx=curDescription.count()-1;
+         int lastCharIdx=curDescription.size()-1;
          //la seguente riga è importante perché se la riga è vuota lastCarIdx è -1
          if(lastCharIdx<0)
              continue;
@@ -2369,11 +2383,16 @@ QString CSimOut::namesPl4ToAdf(int addDigit){
     else
       varNames[var]=varNames[var].mid(0,pPos-1)+node[0]+node[1];
     //Operazioni finali:
+    QString str;
+    str.setNum(addDigit);
     if(addDigit>0)
-      varNames[var]=varNames[var]+QString(addDigit);
+      varNames[var]=varNames[var]+str;
   }
-  if(addDigit>0)
-     varNames[0]=varNames[0]+QString(addDigit);
+  QString str;
+  if(addDigit>0){
+    str.setNum(addDigit);
+    varNames[0]=varNames[0]+str;
+  }
   return "";
 }
 
@@ -2492,7 +2511,7 @@ Da prove fatte con GTPPLOT negli anni '90  appariva che interi negativi non veni
     int index=vars[iVar];
     //Nome privo del prefisso immesso da PlotXY:
     if(fileType==PL4_1 ||fileType==PL4_2){
-      len=varNames[index].count();
+      len=varNames[index].size();
       if(varNames[index][1]==':')
         varName=varNames[index].mid(2);
       else
@@ -2500,19 +2519,24 @@ Da prove fatte con GTPPLOT negli anni '90  appariva che interi negativi non veni
     }else
       varName=varNames[index];
     //Individuo l'unità di misura:
-    CCBM[0]=varNames[index][0];
-    CCBM[1]=0;
+    CCBM=varNames[index].mid(0,1);
+//    CCBM[0]=varNames[index][0];
+//    CCBM[1]=0;
+//    if(varNames[index][3]==':')
+//      CCBM[1]=varNames[index][1];
     if(varNames[index][3]==':')
-      CCBM[1]=varNames[index][1];
-    unit[1]=unit[2]=0;
+      CCBM=varNames[index].mid(0,2);
+
+    //    unit[1]=unit[2]=0;
+    unit="";
     switch(CCBM[0].toLatin1()){
-      case 'v': unit[0]='V'; break;
-      case 'i': unit[0]='A'; break;
-      case 'c': unit[0]='A'; break;
-      case 'p': unit[0]='W'; break;
-      case 'e': unit[0]='J'; break;
+      case 'v': unit="V"; break;
+      case 'i': unit="A"; break;
+      case 'c': unit="A"; break;
+      case 'p': unit="W"; break;
+      case 'e': unit="J"; break;
       case 'a': unit="DEG"; break;
-      default:  unit[0]='?'; break;
+      default:  unit="?"; break;
     }
     //Individuo il valore minimo e massimo:
     offset[index]=max=0;
@@ -2561,7 +2585,7 @@ Da prove fatte con GTPPLOT negli anni '90  appariva che interi negativi non veni
   /* Fase 2: Preparazione file di estensione dat*/
   //Apertura file:
   datFileName=cfgFileName;
-  len=datFileName.count();
+  len=datFileName.size();
   datFileName[len-3]='d';
   datFileName[len-2]='a';
   datFileName[len-1]='t';
@@ -2787,9 +2811,9 @@ Questo un quanto queste due caratteristiche non sono in alcuno modo necessarie p
   //Scrittura valori:
   for(iPoint=0; iPoint<numOfPoints; iPoint++)
     for(iVar=0; iVar<nVars; iVar++)
-        fwrite(&y[vars[iVar]][iPoint],sizeof(float),1,fp);
+      fwrite(&y[vars[iVar]][iPoint],sizeof(float),1,fp);
 
-    if(fclose (fp))
+  if(fclose (fp))
     return "Error closing file";
   else
     return "";

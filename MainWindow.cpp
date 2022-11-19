@@ -12,10 +12,15 @@
 
 /* NOTA IMPORTANTE
  * IN DATA 1/12/2018 è STATA ATTIVA TA ANCHE LA FUNZIONE DI LETTURA DA ADFfILE
- * Putroppo si verifica che sconq uesto tipo di lettura al momento il programma è spesso imprevedibile, evidentemente per qualche problema di uso di memoriia non inizializzata / allocazione di memoria.
- *  Non è stato al momento compreso quale possa essere la causa. Però si lascia il cla funzione di lettura di testFile attiva in quanto può fornire informazioni utili per il debug di ClineChart, seppur con qualche imprevedibilità.
+ * Putroppo si verifica che sconq uesto tipo di lettura al momento il programma è spesso
+ * imprevedibile, evidentemente per qualche problema di uso di memoria non inizializzata /
+ * allocazione di memoria.
+ * Non è stato al momento compreso quale possa essere la causa. Però si lascia il la
+ * funzione di lettura di testFile attiva in quanto può fornire informazioni utili per il
+ * debug di ClineChart, seppur con qualche imprevedibilità.
  * ovviamente si auspica che prima o poi la causa del problema venga individuata e risolta.
- * */
+ *
+*/
 
 /*Per la visualizzazione del grafico verrà  utilizzata una tecnica alquanto articolata.
  * Qui si spiegano sinteticamente le varie scelte.

@@ -3,7 +3,7 @@
 
 #include <QAbstractButton>
 #include <QDialog>
-#include "Globals.h"
+// #include "Globals.h"
 #include "CLineChart.h"
 
 namespace Ui {
