@@ -48,6 +48,9 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="editable">
          <bool>false</bool>
         </property>
@@ -112,6 +115,9 @@
              <pointsize>9</pointsize>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="text">
             <string>Line</string>
            </property>
@@ -145,6 +151,9 @@
              <pointsize>9</pointsize>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="text">
             <string>Bar</string>
            </property>
@@ -174,6 +183,9 @@
             <font>
              <pointsize>9</pointsize>
             </font>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
            </property>
            <property name="text">
             <string>Swarm</string>
@@ -237,6 +249,9 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="text">
               <string>Scale</string>
              </property>
@@ -246,6 +261,9 @@
             <widget class="QToolButton" name="dataTBtn">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
               <string>Data</string>
@@ -257,6 +275,9 @@
            </item>
            <item>
             <widget class="QToolButton" name="diffTBtn">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="text">
               <string>-</string>
              </property>
@@ -266,6 +287,9 @@
             <widget class="QToolButton" name="titleTBtn">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
               <string>Title</string>
@@ -281,6 +305,9 @@
               <font>
                <pointsize>9</pointsize>
               </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
               <string>Interp.</string>
@@ -302,6 +329,9 @@
               <font>
                <pointsize>9</pointsize>
               </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
               <string>Legend</string>
@@ -358,7 +388,7 @@
     <item>
      <widget class="QFrame" name="rightFrame">
       <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -451,6 +481,9 @@
                    <pointsize>9</pointsize>
                   </font>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>linear</string>
                  </property>
@@ -466,6 +499,9 @@
                    <pointsize>9</pointsize>
                   </font>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>dB</string>
                  </property>
@@ -480,6 +516,9 @@
                   <font>
                    <pointsize>9</pointsize>
                   </font>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
                   <string>log</string>
@@ -663,6 +702,9 @@
                    <pointsize>9</pointsize>
                   </font>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>linear</string>
                  </property>
@@ -678,6 +720,9 @@
                    <pointsize>9</pointsize>
                   </font>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>dB</string>
                  </property>
@@ -689,6 +734,9 @@
                   <font>
                    <pointsize>9</pointsize>
                   </font>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
                   <string>log</string>
@@ -781,6 +829,9 @@
                 <pointsize>10</pointsize>
                </font>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string>Force 0</string>
               </property>
@@ -820,6 +871,9 @@
           </property>
           <item>
            <widget class="QRadioButton" name="MC">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>MC</string>
             </property>
@@ -830,6 +884,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="McD">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>McD</string>
             </property>
@@ -843,6 +900,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>QtF</string>
             </property>
@@ -850,6 +910,9 @@
           </item>
           <item>
            <widget class="QRadioButton" name="QTi">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>Qti</string>
             </property>
@@ -895,6 +958,9 @@
               <pointsize>8</pointsize>
              </font>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>Thin</string>
             </property>
@@ -909,6 +975,9 @@
              <font>
               <pointsize>8</pointsize>
              </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
              <string>Thick</string>
@@ -930,6 +999,9 @@
              <font>
               <pointsize>8</pointsize>
              </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
              <string>Auto</string>
@@ -957,6 +1029,15 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>functionCBox</tabstop>
+  <tabstop>xMaxEdit</tabstop>
+  <tabstop>xMinEdit</tabstop>
+  <tabstop>pointsEdit</tabstop>
+  <tabstop>constBEdit</tabstop>
+  <tabstop>constAEdit</tabstop>
+  <tabstop>plotBtn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
