@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    move(150,100);
+    move(20,20);
     ui->plotBtn->setFocus();
 
     //    ui->lineChart->mark();
@@ -390,3 +390,17 @@ void MainWindow::on_xLogScale_clicked()
 {
     ui->lineChart->setXScaleType(stLog);
 }
+
+void MainWindow::on_diffTBtn_clicked()
+{
+  if(ui->lineChart->giveActiveDataCurs()==0)
+    return;
+  if(ui->lineChart->giveActiveDataCurs()==1){
+    ui->lineChart->setActiveDataCurs(2);
+    return;
+  }
+  if(ui->lineChart->giveActiveDataCurs()==2){
+    ui->lineChart->setActiveDataCurs(1);
+  }
+}
+

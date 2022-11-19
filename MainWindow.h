@@ -42,6 +42,8 @@ private slots:
     void on_yDbScale_clicked();
 
 
+    void on_diffTBtn_clicked();
+
 private:
     bool exactMatch;
     Ui::MainWindow *ui;

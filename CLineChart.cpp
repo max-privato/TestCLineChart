@@ -866,8 +866,11 @@ Pertanto l'indice di file è sempre 0 e l'indice della variabile è sempre 0.
 
 
 int CLineChart::drawCurves(bool noCurves){
- /* Funzione per il tracciamento delle curve su grafici di linea.  Contiene al suo interno un algoritmo per l'eliminazione automatica dei punti visualmente ridondanti e del taglio delle curve all'esterno del rettangolo di visualizzazione.
-Essendo stata realizzata con grande cura ed essendo intrinsecamente complessa è sconsigliato modificarla se non strettamente necessario.
+ /* Funzione per il tracciamento delle curve su grafici di linea.  Contiene al suo interno
+  *  un algoritmo per l'eliminazione automatica dei punti visualmente ridondanti e del
+  *  taglio delle curve all'esterno del rettangolo di visualizzazione.
+  *  Essendo stata realizzata con grande cura ed essendo intrinsecamente complessa è
+  *  sconsigliato modificarla se non strettamente necessario.
 */
   int iTotPlot=-1;
   int pointsDrawn0;
@@ -904,7 +907,6 @@ Essendo stata realizzata con grande cura ed essendo intrinsecamente complessa è
       else
         plotPen.setColor(curveParamLst[iTotPlot].color);
       plotPen.setStyle(curveParamLst[iTotPlot].style);
-      qDebug()<<"r-g-b: "<<plotPen.color().red()<<plotPen.color().green()<<plotPen.color().blue();
       myPainter->setPen(plotPen);
       // Calcolo yRatio e symin, valutando se sono relativi alla scala di sinistra o a quella eventuale di destra:
       if(curveParamLst[iTotPlot].rightScale){
@@ -1062,11 +1064,11 @@ Ma con qDebug() il problema non si presenta nemmeno in relase mode!
 Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le funzioni, in attesa che prima o poi il vero problema venga evidenziato.
 */
       static int iWasInRect=0;
-//      qDebug()<<"x,x1,y,y1:"<<x<<x1<<y<<y1;
+      qDebug()<<"x,x1,y,y1:"<<x<<x1<<y<<y1;
       //L'ultimo punto lo traccio solo se il penultimo era nel rettangolo:
       if(wasInRect){
         iWasInRect++;
-//        qDebug()<<"wasInRect, i:"<<wasInRect<<iWasInRect;
+        qDebug()<<"wasInRect, i:"<<wasInRect<<iWasInRect;
         if(FC.isInRect(x,y)){
           path.lineTo(qreal(x1),qreal(y1));
           path.lineTo(qreal(x),qreal(y));
@@ -1094,8 +1096,9 @@ Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le 
           myPainter->drawPath(path);
 //          qDebug() << "drawpath operation took" << timer.elapsed() << "milliseconds";
       }else{
-// Qui uso la sintassi che mi è stata suggerita da Samuel Rodal, ma è superflua l'iterazione fa i poligoni, visto che le mie curve sono composte tutte da un unico poligono. Notare l'uso di foreach(), estensione di Qt al C++ (significato accessibile via help).
+// Qui uso la sintassi che mi è stata suggerita da Samuel Rodal, ma è superflua l'iterazione fra i poligoni, visto che le mie curve sono composte tutte da un unico poligono. Notare l'uso di foreach(), estensione di Qt al C++ (significato accessibile via help).
           int i;
+          qDebug()<<"r-g-b: "<<myPainter->pen().color().red()<< myPainter->pen().color().green()<<myPainter->pen().color().blue();
           foreach(QPolygonF poly, path.toSubpathPolygons())
               for(i=0; i<poly.size()-1; i++)
                   myPainter->drawLine(poly.at(i),poly.at(i+1));
@@ -1107,8 +1110,11 @@ Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le 
 }
 
 int CLineChart::drawCurvesD(bool noCurves){
- /* Funzione per il tracciamento delle curve su grafici di linea.  Contiene al suo interno un algoritmo per l'eliminazione automatica dei punti visualmente ridondanti e del taglio delle curve all'esterno del rettangolo di visualizzazione.
-Essendo stata realizzata con grande cura ed essendo intrinsecamente complessa è sconsigliato modificarla se non strettamente necessario.
+ /* Funzione per il tracciamento delle curve su grafici di linea.  Contiene al suo interno
+  * un algoritmo per l'eliminazione automatica dei punti visualmente ridondanti e del
+  * taglio delle curve all'esterno del rettangolo di visualizzazione.
+  * Essendo stata realizzata con grande cura ed essendo intrinsecamente complessa è
+  * sconsigliato modificarla se non strettamente necessario.
 */
   int iTotPlot=-1;
   int pointsDrawn0;
