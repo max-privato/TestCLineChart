@@ -43,6 +43,9 @@ private slots:
 
     void on_diffTBtn_clicked();
     void on_titleTBtn_clicked(bool checked);
+    void on_QtPoly_clicked();
+
+    void on_QTi_clicked();
 
 private:
     bool exactMatch;

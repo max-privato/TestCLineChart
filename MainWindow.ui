@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
+    <width>678</width>
     <height>428</height>
    </rect>
   </property>
@@ -202,8 +202,8 @@
        </widget>
       </item>
       <item>
-       <widget class="CLineChart" name="lineChart">
-        <property name="text">
+       <widget class="CLineChart" name="lineChart" native="true">
+        <property name="text" stdset="0">
          <string>TextLabel</string>
         </property>
        </widget>
@@ -881,7 +881,7 @@
              <string>MC</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -892,6 +892,9 @@
             </property>
             <property name="text">
              <string>McD</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -909,6 +912,9 @@
             <property name="text">
              <string>QtF</string>
             </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -918,6 +924,13 @@
             </property>
             <property name="text">
              <string>Qti</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="QtPoly">
+            <property name="text">
+             <string>QtPoly</string>
             </property>
            </widget>
           </item>
@@ -1027,8 +1040,8 @@
  <customwidgets>
   <customwidget>
    <class>CLineChart</class>
-   <extends>QLabel</extends>
-   <header location="global">clinechart.h</header>
+   <extends>QWidget</extends>
+   <header>CLineChart.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

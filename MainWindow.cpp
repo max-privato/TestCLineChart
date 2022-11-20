@@ -73,6 +73,16 @@ MainWindow::MainWindow(QWidget *parent) :
     if (ui->yLogScale->isChecked())
        ui->lineChart->setYScaleType(stLog);
 
+    if (ui->MC->isChecked())
+        ui->lineChart->drawType=dtMC;
+    if (ui->McD->isChecked())
+        ui->lineChart->drawType=dtMcD;
+    if (ui->QtF->isChecked())
+        ui->lineChart->drawType=dtQtF;
+    if (ui->QTi->isChecked())
+        ui->lineChart->drawType=dtQtI;
+    if (ui->QtPoly->isChecked())
+        ui->lineChart->drawType=dtPoly;
 }
 
 MainWindow::~MainWindow()
@@ -335,10 +345,6 @@ void MainWindow::on_swarmPlot_clicked()
     ui->lineChart->plotType=ptSwarm;
 }
 
-void MainWindow::on_QtF_clicked()
-{
-    ui->lineChart->drawType=dtQtF;
-}
 
 void MainWindow::on_MC_clicked()
 {
@@ -348,6 +354,22 @@ void MainWindow::on_MC_clicked()
 void MainWindow::on_McD_clicked()
 {
     ui->lineChart->drawType=dtMcD;
+}
+
+void MainWindow::on_QtF_clicked()
+{
+    ui->lineChart->drawType=dtQtF;
+}
+
+void MainWindow::on_QTi_clicked()
+{
+    ui->lineChart->drawType=dtQtI;
+}
+
+
+void MainWindow::on_QtPoly_clicked()
+{
+    ui->lineChart->drawType=dtPoly;
 }
 
 
@@ -413,4 +435,8 @@ void MainWindow::on_titleTBtn_clicked(bool checked)
     else
       ui->lineChart->disableTitle();
 }
+
+
+
+
 
