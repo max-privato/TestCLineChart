@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 8.0.2, 2022-11-20T12:04:07. -->
+<!-- Written by QtCreator 8.0.2, 2022-11-20T12:45:28. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -200,6 +200,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory">D:/OneDrive - University of Pisa/Documenti/C++/Qt/GITHUB-LINKED/TestCLineChart</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/QT_BUILDS/TestCLineChart 5.15</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>

@@ -638,7 +638,7 @@ QString CSimOut::loadFromAdfFile(QString fullName, bool csv){
       y[0][iL]=y[0][iL-1]+autoStepValue;
   }
   //Soltanto la prima riga di valori la leggo con conteggio del numero di dati presenti. Questo mi consente di intercettare l'errore più frequente nei files ADF, ovvero numero di variabili specificate nella seconda riga incongruente con il numero di dati per riga presenti.
-  delete str;
+  delete[] str;
   str=new char[rowLength[2]];
   fgets(str,rowLength[2],fpIn);
 /*** In Mac a fine riga leggo "\r\n" invece di "\n".

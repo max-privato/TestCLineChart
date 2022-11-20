@@ -2175,10 +2175,10 @@ void CLineChart::getData(float *px_,float **py_, int nPoints_, int nPlots_){
    //Attribuisco valori default standard alle variabili necessarie al getData per singole variabili asse x,
    FI.name="fileName";
    FI.numOfPoints=nPoints_;
-   FI.variableStep=false;
+   FI.variableStep=true;
    xVarParam.name="x";
    xVarParam.isMonotonic=true;
-   xVarParam.isVariableStep=false;
+   xVarParam.isVariableStep=true;
    curveParamLst.clear();
    SCurveParam param;
    for(i=0; i<nPlots_; i++){
@@ -2517,6 +2517,11 @@ int CLineChart::giveNearValue(QPoint mouseP , QPoint &nearP, QPointF &valueP){
           index++;
     }
     // index trovato!
+
+    //La seguente condizione non si dovrebbe mai verificare. Ma siccome è stato visto che questo accade, al fine di facilitare il debug metto il seguente check, comodo per mettere un breakpoiont su badIndex=true;
+    bool badIndex=false;
+    if(index>=nPoints)
+        badIndex=true;
 
     //Ora scelgo per il file corrente il punto più vicino verticalmente al cursore
     if(xAxis.scaleType==stLin)
