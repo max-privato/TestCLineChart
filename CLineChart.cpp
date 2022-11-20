@@ -1152,10 +1152,7 @@ int CLineChart::drawCurvesD(bool noCurves){
         plotPen.setColor(Qt::black);
       else
         plotPen.setColor(curveParamLst[iTotPlot].color);
-      if(iPlot>7)
-          plotPen.setStyle(Qt::DashLine);
-      else
-          plotPen.setStyle(Qt::SolidLine);
+      plotPen.setStyle(curveParamLst[iTotPlot].style);
       myPainter->setPen(plotPen);
       // Calcolo yRatio e symin, valutando se sono relativi alla scala di sinistra o a quella eventuale di destra:
       if(curveParamLst[iTotPlot].rightScale){
@@ -1213,8 +1210,8 @@ int CLineChart::drawCurvesD(bool noCurves){
         if(FCd.isInRect(xPlus,yPlus)){
           FCd.getLine(x1,y1,xPlus,yPlus);
           FCd.giveRectIntersect(I1,I2);
+          path.moveTo(NearIntD(I1.X), NearIntD(I1.Y));
         }
-        path.moveTo(NearIntD(I1.X), NearIntD(I1.Y));
       }else{
         path.moveTo(x1,y1);
       }
@@ -4036,6 +4033,8 @@ Se X, oltre che monotona crescente è anche costituita da campioni equispaziati 
     case ptLine:
       if(drawType==dtMC)
         drawCurves(Virtual);
+      else if(drawType==dtMcD)
+        drawCurvesD(Virtual);
       else if(drawType==dtQtF)
         drawCurvesQtF(Virtual);
       else if(drawType==dtQtI)
