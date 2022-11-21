@@ -5238,8 +5238,10 @@ bool CLineChart::CFilterClip::getLine(float X1_, float Y1_, float X2_, float Y2_
 }
 
 void CLineChart::CFilterClip::getRect(int X0, int Y0, int X1, int Y1){
-    R.Left=X0-0.5f;	R.Top=Y0-0.5f;
-    R.Right=X1+0.5f; R.Bottom=Y1+0.5f;
+    R.Left=X0;
+    R.Top=Y0;
+    R.Right=X1;
+    R.Bottom=Y1;
 }
 
 bool  CLineChart::CFilterClip::isInRect(float X, float Y){
@@ -5409,8 +5411,10 @@ bool CLineChart::CFilterClipD::getLine(double X1_, double Y1_, double X2_, doubl
 }
 
 void CLineChart::CFilterClipD::getRect(int X0, int Y0, int X1, int Y1){
-    R.Left=X0-0.5;	R.Top=Y0-0.5;
-    R.Right=X1+0.5; R.Bottom=Y1+0.5;
+    R.Left=X0;
+    R.Top=Y0;
+    R.Right=X1;
+    R.Bottom=Y1;
 }
 
 bool  CLineChart::CFilterClipD::isInRect(double X, double Y){
@@ -5446,7 +5450,7 @@ bool  CLineChart::CFilterClipD::isRedundant(double X, double Y){
 int CLineChart::CFilterClipD::giveRectIntersect(DoublePoint & I1, DoublePoint &I2){
     /* Questa funzione copia nei parametri passati i valori delle eventuali intersezioni
     del segmento congiungente i due punti interni (X1,Y1) e (X2,Y2), passati con la
-    prescedente getLine, con il rettangolo R passato con il recente GetRect.
+    prescedente getLine, con il rettangolo R passato con il recente getRect.
     La funzione ritorna il numero di intersezioni trovate.
     */
     double X;
