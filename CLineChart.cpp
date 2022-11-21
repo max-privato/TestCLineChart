@@ -1064,11 +1064,11 @@ Ma con qDebug() il problema non si presenta nemmeno in relase mode!
 Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le funzioni, in attesa che prima o poi il vero problema venga evidenziato.
 */
       static int iWasInRect=0;
-      qDebug()<<"x,x1,y,y1:"<<x<<x1<<y<<y1;
+//      qDebug()<<"x,x1,y,y1:"<<x<<x1<<y<<y1;
       //L'ultimo punto lo traccio solo se il penultimo era nel rettangolo:
       if(wasInRect){
         iWasInRect++;
-        qDebug()<<"wasInRect, i:"<<wasInRect<<iWasInRect;
+//        qDebug()<<"wasInRect, i:"<<wasInRect<<iWasInRect;
         if(FC.isInRect(x,y)){
           path.lineTo(qreal(x1),qreal(y1));
           path.lineTo(qreal(x),qreal(y));
@@ -1093,16 +1093,16 @@ Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le 
 //      out<<path;
 //      file.close();
       if(makingSVG){
-          myPainter->drawPath(path);
-//          qDebug() << "drawpath operation took" << timer.elapsed() << "milliseconds";
+        myPainter->drawPath(path);
+//        qDebug() << "drawpath operation took" << timer.elapsed() << "milliseconds";
       }else{
 // Qui uso la sintassi che mi è stata suggerita da Samuel Rodal, ma è superflua l'iterazione fra i poligoni, visto che le mie curve sono composte tutte da un unico poligono. Notare l'uso di foreach(), estensione di Qt al C++ (significato accessibile via help).
-          int i;
-          qDebug()<<"r-g-b: "<<myPainter->pen().color().red()<< myPainter->pen().color().green()<<myPainter->pen().color().blue();
-          qDebug()<<"width: "<<myPainter->pen().width();
-          foreach(QPolygonF poly, path.toSubpathPolygons())
-              for(i=0; i<poly.size()-1; i++)
-                  myPainter->drawLine(poly.at(i),poly.at(i+1));
+        int i;
+        qDebug()<<"r-g-b: "<<myPainter->pen().color().red()<< myPainter->pen().color().green()<<myPainter->pen().color().blue();
+        qDebug()<<"width: "<<myPainter->pen().width();
+        foreach(QPolygonF poly, path.toSubpathPolygons())
+          for(i=0; i<poly.size()-1; i++)
+            myPainter->drawLine(poly.at(i),poly.at(i+1));
 //          qDebug() << "foreach operation took" << timer.elapsed() << "milliseconds";
       }
     } //Fine tracciamento varie curve relative ad un medesimo file
@@ -1317,7 +1317,6 @@ Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le 
       //L'ultimo punto lo traccio solo se il penultimo era nel rettangolo:
       if(wasInRect){
         iWasInRect++;
-//        qDebug()<<"wasInRect, i:"<<wasInRect<<iWasInRect;
         if(FCd.isInRect(x,y)){
           path.lineTo(x1,y1);
           path.lineTo(x,y);
@@ -1345,13 +1344,12 @@ Per ora pertanto si lascia il codice con queste righe, riducendone al minimo le 
           myPainter->drawPath(path);
 //          qDebug() << "drawpath operation took" << timer.elapsed() << "milliseconds";
       }else{
-// Qui uso la sintassi che mi è stata suggerita da Samuel Rodal, ma è superflua l'iterazione fa i poligoni, visto che le mie curve sono composte tutte da un unico poligono. Notare l'uso di foreach(), estensione di Qt al C++ (significato accessibile via help).
+// Qui uso la sintassi che mi è stata suggerita da Samuel Rodal, ma è superflua l'iterazione fra i poligoni, visto che le mie curve sono composte tutte da un unico poligono. Notare l'uso di foreach(), estensione di Qt al C++ (significato accessibile via help).
           foreach(QPolygonF poly, path.toSubpathPolygons())
               for(int i=0; i<poly.size()-1; i++)
                   myPainter->drawLine(poly.at(i),poly.at(i+1));
-//          qDebug() << "foreach operation took" << timer.elapsed() << "milliseconds";
       }
-    } //Fine tracciamento varie curve relative ad un medesimo file
+    } //Fine tracciamento varie curve relative a un medesimo file
   } //Fine ciclo for fra i vari files
  return 0;
 }
@@ -2190,6 +2188,7 @@ void CLineChart::getData(float *px_,float **py_, int nPoints_, int nPlots_){
      param.name="var";
      param.rightScale=false;
      param.unitS="";
+     param.style=Qt::SolidLine;
      curveParamLst.append(param);
     }
 
@@ -2518,7 +2517,7 @@ int CLineChart::giveNearValue(QPoint mouseP , QPoint &nearP, QPointF &valueP){
     }
     // index trovato!
 
-    //La seguente condizione non si dovrebbe mai verificare. Ma siccome è stato visto che questo accade, al fine di facilitare il debug metto il seguente check, comodo per mettere un breakpoiont su badIndex=true;
+    //La seguente condizione non si dovrebbe mai verificare. Ma siccome è stato visto che questo in rarissimi casi accade, al fine di facilitare il debug metto il seguente check, comodo per mettere un breakpoiont su badIndex=true;
     bool badIndex=false;
     if(index>=nPoints)
         badIndex=true;
@@ -3865,12 +3864,10 @@ QString CLineChart::goPlot(bool Virtual, bool /*IncludeFO*/){
   if(PPlotPenWidth!=pwAuto){
     ticPen.setWidth(PPlotPenWidth+1); //se pwThin uso 1 pixel, se pwThick 2
     plotPen.setWidth(PPlotPenWidth+1);
-    framePen.setWidth(PPlotPenWidth+1);
   }else{  //Ora sono in spessore penna automatico
     //Si ricordi che il risultato della seguente divisione è troncato, non arrotondato.
     ticPen.setWidth(qMax(1,(plotRect.width()+plotRect.height())/1000));
     plotPen.setWidth(ticPen.width());
-    framePen.setWidth(plotPen.width());
   }
   if(cutsLimits){
     framePen.setWidth(qMax(plotPen.width(),3));
@@ -4805,7 +4802,7 @@ SFloatRect2 CLineChart::setFullDispRect(){
 void CLineChart::setPlotPenWidth(EPlotPenWidth myWidth){
   PPlotPenWidth=myWidth;
   /* In linea di massima si potrebbe pensare di attribuire qui PPlotPenWidth a plotPen, ticPen, framePen. Il problema è che il valore passato non è sempre un numero fisso: nel caso sia pwAuto, dipenderà  dalle dimensioni della finestra. Di conseguenza sarebbe abbastanza inutile.
-Pertanto l'attribuzione dei valori effettivi degli spessori delle penne sarà  fatta all'inizio della funzione plot(bool, bool). */
+Pertanto l'attribuzione dei valori effettivi degli spessori delle penne sarà fatta all'inizio della funzione goPlot(bool, bool). */
 }
 
 void CLineChart::setXZeroLine(bool zeroLine_){
