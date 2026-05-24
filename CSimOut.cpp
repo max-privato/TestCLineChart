@@ -26,7 +26,6 @@
 #include "ExcludeATPCode.h"
 #include "MTLmatrix.h"
 #include "mat.h"
-#include "matrix.h"
 #include "CSimOut.h"
 
 //le seguenti due righe sono per Matlab (versione 7)

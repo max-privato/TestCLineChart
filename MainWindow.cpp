@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "Matrix.h"
+#include "SuppFunctions.h"
 #include "CLineChart.h"
 #include "CSimOut.cpp"
 #include <QString>
@@ -232,11 +232,6 @@ void MainWindow::on_plotBtn_clicked()
       break;
   }
 
-  float xd[5], yd[5];
-  for(i=0; i<5; i++){
-    xd[i]=x[0][i];
-    yd[i]=y[0][i];
-  }
 
   ui->lineChart->getData(x[0],y,nPoints,nPlots);
 

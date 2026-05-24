@@ -27,7 +27,7 @@ CONFIG += c++11
 SOURCES += \
     MainWindow.cpp \
     CLineChart.cpp \
-    Matrix.cpp \
+    SuppFunctions.cpp \
     Main.cpp \
     CScaleDlg.cpp \
     CUnitsDlg.cpp \
@@ -37,7 +37,7 @@ SOURCES += \
 HEADERS += \
     MainWindow.h \
     CLineChart.h \
-    Matrix.h \
+    SuppFunctions.h \
     CScaleDlg.h \
     CUnitsDlg.h \
     CSimOut.h \
