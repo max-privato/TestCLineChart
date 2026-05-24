@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+﻿#include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "SuppFunctions.h"
 #include "CLineChart.h"
@@ -49,6 +49,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Explicit connections — replaces Qt auto-connect-by-name (on_foo_bar convention)
+    connect(ui->plotBtn,    &QAbstractButton::clicked, this, &MainWindow::plotBtn_clicked);
+    connect(ui->barPlot,    &QAbstractButton::clicked, this, &MainWindow::barPlot_clicked);
+    connect(ui->linePlot,   &QAbstractButton::clicked, this, &MainWindow::linePlot_clicked);
+    connect(ui->swarmPlot,  &QAbstractButton::clicked, this, &MainWindow::swarmPlot_clicked);
+    connect(ui->dataTBtn,   &QAbstractButton::clicked, this, &MainWindow::dataTBtn_clicked);
+    connect(ui->scaleTBtn,  &QAbstractButton::clicked, this, &MainWindow::scaleTBtn_clicked);
+    connect(ui->titleTBtn,  &QAbstractButton::clicked, this, &MainWindow::titleTBtn_clicked);
+    connect(ui->diffTBtn,   &QAbstractButton::clicked, this, &MainWindow::diffTBtn_clicked);
+    connect(ui->Force0Ckb,  &QAbstractButton::clicked, this, &MainWindow::Force0Ckb_clicked);
+    connect(ui->MC,         &QAbstractButton::clicked, this, &MainWindow::MC_clicked);
+    connect(ui->McD,        &QAbstractButton::clicked, this, &MainWindow::McD_clicked);
+    connect(ui->QtF,        &QAbstractButton::clicked, this, &MainWindow::QtF_clicked);
+    connect(ui->QTi,        &QAbstractButton::clicked, this, &MainWindow::QTi_clicked);
+    connect(ui->QtPoly,     &QAbstractButton::clicked, this, &MainWindow::QtPoly_clicked);
+    connect(ui->widthThin,  &QAbstractButton::clicked, this, &MainWindow::widthThin_clicked);
+    connect(ui->widthThick, &QAbstractButton::clicked, this, &MainWindow::widthThick_clicked);
+    connect(ui->widthAuto,  &QAbstractButton::clicked, this, &MainWindow::widthAuto_clicked);
+    connect(ui->xDbScale,   &QAbstractButton::clicked, this, &MainWindow::xDbScale_clicked);
+    connect(ui->xLinScale,  &QAbstractButton::clicked, this, &MainWindow::xLinScale_clicked);
+    connect(ui->xLogScale,  &QAbstractButton::clicked, this, &MainWindow::xLogScale_clicked);
+    connect(ui->yDbScale,   &QAbstractButton::clicked, this, &MainWindow::yDbScale_clicked);
+    connect(ui->yLinScale,  &QAbstractButton::clicked, this, &MainWindow::yLinScale_clicked);
+    connect(ui->yLogScale,  &QAbstractButton::clicked, this, &MainWindow::yLogScale_clicked);
+
     move(20,20);
     ui->plotBtn->setFocus();
 
@@ -102,7 +128,7 @@ void MainWindow::chartValuesChanged(SXYValues values, bool hDifference, bool vDi
 }
 
 
-void MainWindow::on_plotBtn_clicked()
+void MainWindow::plotBtn_clicked()
 {
   bool Error=false;
   int i, nPoints, nPlots=1; //nPlots vale normalmente 1; E' forzato a 2 solo se deve essere messa la scala destra.
@@ -253,7 +279,7 @@ void MainWindow::on_plotBtn_clicked()
   ui->elapsed->setText(Msg);
 }
 
-void MainWindow::on_dataTBtn_clicked(bool checked)
+void MainWindow::dataTBtn_clicked(bool checked)
 {
    int numOfTotPlots=1;
     if(checked){
@@ -277,7 +303,7 @@ void MainWindow::on_dataTBtn_clicked(bool checked)
 }
 
 
-void MainWindow::on_scaleTBtn_clicked()
+void MainWindow::scaleTBtn_clicked()
 {
     //Preparazione prima della visualizzazione della scheda:
     myScaleDlg->getInfo(ui->lineChart->giveDispRect(),ui->lineChart->twinScale);
@@ -308,108 +334,103 @@ void MainWindow::on_scaleTBtn_clicked()
 //    ui->lineChart->markAll();
 }
 
-void MainWindow::on_widthThin_clicked()
+void MainWindow::widthThin_clicked()
 {
     ui->lineChart->setPlotPenWidth(pwThin);
 }
 
-void MainWindow::on_widthThick_clicked()
+void MainWindow::widthThick_clicked()
 {
     ui->lineChart->setPlotPenWidth(pwThick);
 }
 
-void MainWindow::on_widthAuto_clicked()
+void MainWindow::widthAuto_clicked()
 {
     ui->lineChart->setPlotPenWidth(pwAuto);
 }
 
 
-void MainWindow::on_Force0Ckb_clicked()
+void MainWindow::Force0Ckb_clicked()
 {
     ui->lineChart->forceYZero=ui->Force0Ckb->checkState();
 
 }
 
-void MainWindow::on_linePlot_clicked()
+void MainWindow::linePlot_clicked()
 {
     ui->lineChart->plotType=ptLine;
 }
 
-void MainWindow::on_swarmPlot_clicked()
+void MainWindow::swarmPlot_clicked()
 {
     ui->lineChart->plotType=ptSwarm;
 }
 
 
-void MainWindow::on_MC_clicked()
+void MainWindow::MC_clicked()
 {
     ui->lineChart->drawType=dtMC;
 }
 
-void MainWindow::on_McD_clicked()
+void MainWindow::McD_clicked()
 {
     ui->lineChart->drawType=dtMcD;
 }
 
-void MainWindow::on_QtF_clicked()
+void MainWindow::QtF_clicked()
 {
     ui->lineChart->drawType=dtQtF;
 }
 
-void MainWindow::on_QTi_clicked()
+void MainWindow::QTi_clicked()
 {
     ui->lineChart->drawType=dtQtI;
 }
 
 
-void MainWindow::on_QtPoly_clicked()
+void MainWindow::QtPoly_clicked()
 {
     ui->lineChart->drawType=dtPoly;
 }
 
 
-void MainWindow::on_barPlot_clicked()
+void MainWindow::barPlot_clicked()
 {
     ui->lineChart->plotType=ptBar;
 }
 
-void MainWindow::on_QtI_clicked()
-{
-    ui->lineChart->drawType=dtQtI;
-}
-
-void MainWindow::on_xDbScale_clicked()
+void MainWindow::xDbScale_clicked()
 {
     ui->lineChart->setXScaleType(stDB);
 }
 
-void MainWindow::on_xLinScale_clicked()
+void MainWindow::xLinScale_clicked()
 {
     ui->lineChart->setXScaleType(stLin);
 }
 
-void MainWindow::on_yLinScale_clicked()
+void MainWindow::yLinScale_clicked()
 {
     ui->lineChart->setYScaleType(stLin);
 }
 
-void MainWindow::on_yDbScale_clicked()
+void MainWindow::yDbScale_clicked()
 {
     ui->lineChart->setYScaleType(stDB);
 }
 
-void MainWindow::on_yLogScale_clicked()
+void MainWindow::yLogScale_clicked()
 {
     ui->lineChart->setYScaleType(stLog);
 }
 
 
-void MainWindow::on_xLogScale_clicked()
+void MainWindow::xLogScale_clicked()
 {
     ui->lineChart->setXScaleType(stLog);
 }
 
-void MainWindow::on_diffTBtn_clicked()
+void MainWindow::diffTBtn_clicked()
 {
   if(ui->lineChart->giveActiveDataCurs()==0)
     return;
@@ -423,7 +444,7 @@ void MainWindow::on_diffTBtn_clicked()
 }
 
 
-void MainWindow::on_titleTBtn_clicked(bool checked)
+void MainWindow::titleTBtn_clicked(bool checked)
 {
     if(checked)
       ui->lineChart->enableTitle();
@@ -431,6 +452,10 @@ void MainWindow::on_titleTBtn_clicked(bool checked)
       ui->lineChart->disableTitle();
 }
 
+
+void MainWindow::showEvent(QShowEvent *) {
+    plotBtn_clicked();
+}
 
 
 

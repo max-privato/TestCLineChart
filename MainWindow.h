@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -14,38 +14,39 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    void showEvent(QShowEvent *) override;
     ~MainWindow();
 
 private slots:
 
     void chartValuesChanged(SXYValues values, bool hDifference, bool vDifference);
-    void on_barPlot_clicked();
-    void on_dataTBtn_clicked(bool checked);
-    void on_Force0Ckb_clicked();
-    void on_linePlot_clicked();
-    void on_MC_clicked();
-    void on_McD_clicked();
-    void on_QtF_clicked();
-    void on_QtI_clicked();
-    void on_plotBtn_clicked();
-    void on_scaleTBtn_clicked();
-    void on_swarmPlot_clicked();
+    void barPlot_clicked();
+    void dataTBtn_clicked(bool checked);
+    void Force0Ckb_clicked();
+    void linePlot_clicked();
+    void MC_clicked();
+    void McD_clicked();
+    void QtF_clicked();
 
-    void on_widthThin_clicked();
-    void on_widthThick_clicked();
-    void on_widthAuto_clicked();
-    void on_xDbScale_clicked();
-    void on_xLinScale_clicked();
-    void on_xLogScale_clicked();
-    void on_yLogScale_clicked();
-    void on_yLinScale_clicked();
-    void on_yDbScale_clicked();
+    void plotBtn_clicked();
+    void scaleTBtn_clicked();
+    void swarmPlot_clicked();
 
-    void on_diffTBtn_clicked();
-    void on_titleTBtn_clicked(bool checked);
-    void on_QtPoly_clicked();
+    void widthThin_clicked();
+    void widthThick_clicked();
+    void widthAuto_clicked();
+    void xDbScale_clicked();
+    void xLinScale_clicked();
+    void xLogScale_clicked();
+    void yLogScale_clicked();
+    void yLinScale_clicked();
+    void yDbScale_clicked();
 
-    void on_QTi_clicked();
+    void diffTBtn_clicked();
+    void titleTBtn_clicked(bool checked);
+    void QtPoly_clicked();
+
+    void QTi_clicked();
 
 private:
     bool exactMatch;
